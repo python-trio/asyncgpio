@@ -44,7 +44,7 @@ Tips
 To run tests
 ------------
 
-* Install requirements: ``pip install -r test-requirements.txt``
+* Install requirements: ``pip install -r ci/test-requirements.txt``
   (possibly in a virtualenv)
 
 * Actually run the tests: ``pytest trio_gpio``
@@ -54,10 +54,10 @@ To run yapf
 -----------
 
 * Show what changes yapf wants to make: ``yapf -rpd setup.py
-  trio_gpio``
+  trio_gpio tests``
 
 * Apply all changes directly to the source tree: ``yapf -rpi setup.py
-  trio_gpio``
+  trio_gpio tests``
 
 
 To make a release
