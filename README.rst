@@ -1,11 +1,10 @@
 trio-gpio
 =========
 
-Welcome to `trio-gpio <https://github.com/M-o-a-T/trio-gpio>`__!
+Trio-GPIO allows easy access to the GPIO pins on your Raspberry Pi or
+similar embedded computer.
 
-GPIO access via Trio and libgpiod
+It is based on libgpiod and its CFFI adapter by Steven P. Goldsmith
+<sgjava@gmail.com>, as downloaded from
+`https://github.com/sgjava/userspaceio.git`__.
 
-License: Your choice of MIT or Apache License 2.0
-
-COOKIECUTTER-TRIO-TODO: finish filling in your README!
-Must be valid ReST; also used as the PyPI description.
