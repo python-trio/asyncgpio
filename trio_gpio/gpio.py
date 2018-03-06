@@ -79,17 +79,17 @@ class Line:
 	@property
 	def is_open_drain(self):
 		self._is_open()
-		return gpio.lib.is_open_drain(self._line)
+		return gpio.lib.gpiod_line_is_open_drain(self._line)
 
 	@property
 	def is_open_source(self):
 		self._is_open()
-		return gpio.lib.is_open_source(self._line)
+		return gpio.lib.gpiod_line_is_open_source(self._line)
 
 	@property
 	def is_used(self):
 		self._is_open()
-		return gpio.lib.is_used(self._line)
+		return gpio.lib.gpiod_line_is_used(self._line)
 
 	@property
 	def offset(self):
