@@ -48,8 +48,11 @@ class Line:
 		return self
 
 	def __exit__(self, *tb):
-		gpio.lib.gpiod_line_release(self._line)
-		self._line = None
+		if self._line is not None:
+			try:
+				gpio.lib.gpiod_line_release(self._line)
+			finally:
+				self._line = None
 
 	def _is_open(self):
 		if self._line is None:
