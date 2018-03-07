@@ -3,6 +3,7 @@ Maintainer: Matthias Urlichs <matthias@urlichs.de>
 Section: python
 Priority: optional
 Build-Depends: dh-python, python3-setuptools, python3-all, debhelper (>= 9),
+  libgpiod-dev,
   python3-trio,
   python3-cffi,
 Standards-Version: 3.9.6
@@ -11,6 +12,7 @@ Homepage: https://github.com/M-o-a-T/trio-gpio
 Package: python3-trio-gpio
 Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends},
+  libgpiod1,
   python3-trio,
   python3-cffi,
 Standards-Version: 3.9.6
