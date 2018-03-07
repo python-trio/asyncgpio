@@ -2,10 +2,10 @@
 
 import sys
 
-from ._version import __version__
+from ._version import __version__  # noqa
 
 from .gpio import Chip
-from .libgpiod import *
+from .libgpiod import *  # noqa
 
 def open_chip(num=0, consumer=sys.argv[0]):
     """Returns an object representing a GPIO chip.

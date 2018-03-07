@@ -28,7 +28,11 @@ nitpicky = True
 nitpick_ignore = [
     # Format is ("sphinx reference type", "string"), e.g.:
     ("py:obj", "bytes-like"),
+    ("py:class", "trio_gpio.gpio.Chip"),
+    ("py:class", "trio_gpio.gpio.Line"),
 ]
+
+autodoc_inherit_docstrings = False
 
 # -- General configuration ------------------------------------------------
 

@@ -28,7 +28,7 @@ assuming there's more than one.
 The ``consumer`` argument is optional. It describes your code to the kernel, so that
 a program which enumerates GPIO users can display who currently uses the pin in question.
 
-.. autofunction:: open_chip
+.. autofunction:: trio_gpio.open_chip
 
 Referring to a line
 -------------------
