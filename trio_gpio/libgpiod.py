@@ -29,6 +29,7 @@ __all__ = [
 	"REQUEST_FLAG_ACTIVE_LOW",
 	"EVENT_RISING_EDGE",
 	"EVENT_FALLING_EDGE",
+	"ffi",
 	"lib",
 ]
 
