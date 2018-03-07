@@ -1,0 +1,5 @@
+trio-gpio (0.0.0-1) smurf; urgency=low
+
+  * source package automatically created by stdeb 0.8.5
+
+ -- Matthias Urlichs <matthias@urlichs.de>  Wed, 07 Mar 2018 13:34:02 +0100
