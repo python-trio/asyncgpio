@@ -1,4 +1,4 @@
-trio-gpio (0.0.0-1) smurf; urgency=low
+trio-gpio (0.1.0-1) unstable; urgency=low
 
   * source package automatically created by stdeb 0.8.5
 
