@@ -4,6 +4,7 @@ import sys
 import trio
 import datetime
 
+
 class Chip:
     """Represents a GPIO chip.
 
@@ -15,10 +16,11 @@ class Chip:
 
     """
     _chip = None
+
     def __init__(self, num=0, consumer=sys.argv[0]):
         self._num = num
         self._consumer = consumer
-    
+
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name, self._num)
 
@@ -27,7 +29,7 @@ class Chip:
         if self._chip == gpio.ffi.NULL:
             raise OSError("unable to open chip")
         return self
-    
+
     def __exit__(self, *tb):
         gpio.lib.gpiod_chip_close(self._chip)
         self._chip = None
@@ -43,12 +45,14 @@ class Chip:
             consumer = self._consumer
         return Line(self, offset, consumer=consumer)
 
+
 _FREE = 0
 _PRE_IO = 1
 _IN_IO = 2
 _PRE_EV = 3
 _IN_EV = 4
 _IN_USE = {_IN_IO, _IN_EV}
+
 
 class Line:
     """Represents a single GPIO line.
@@ -66,9 +70,11 @@ class Line:
         self._offset = offset
         self._consumer = consumer.encode("utf-8")
         self.__consumer = gpio.ffi.new("char[]", self._consumer)
-    
+
     def __repr__(self):
-        return "<%s %s:%d %s=%d>" % (self.__class__.__name__,self._chip,self._offset, self._line,self._state)
+        return "<%s %s:%d %s=%d>" % (
+            self.__class__.__name__, self._chip, self._offset, self._line, self._state
+        )
 
     def open(self, direction=gpio.DIRECTION_INPUT, default=False, flags=0):
         """
@@ -107,20 +113,22 @@ class Line:
         elif self._state == _PRE_EV:
             self._enter_ev()
         else:
-            raise RuntimeError("wrong state",self)
+            raise RuntimeError("wrong state", self)
         return self
 
     def _enter_io(self):
         if self._direction == gpio.DIRECTION_INPUT:
             r = gpio.lib.gpiod_line_request_input_flags(self._line, self._consumer, self._flags)
         elif self._direction == gpio.DIRECTION_OUTPUT:
-            r = gpio.lib.gpiod_line_request_output_flags(self._line, self._consumer, self._flags, self._default)
+            r = gpio.lib.gpiod_line_request_output_flags(
+                self._line, self._consumer, self._flags, self._default
+            )
         else:
             self.__exit__()
-            raise RuntimeError("Unknown direction",r)
+            raise RuntimeError("Unknown direction", r)
         if r != 0:
             self.__exit__()
-            raise OSError("unable to set direction",r)
+            raise OSError("unable to set direction", r)
         self._state = _IN_IO
         return self
 
@@ -144,7 +152,7 @@ class Line:
 
     def _is_open(self):
         if self._state not in _IN_USE:
-            raise RuntimeError("Line is not open",self)
+            raise RuntimeError("Line is not open", self)
 
     @property
     def value(self):
@@ -187,7 +195,7 @@ class Line:
         if self._line is None:
             return self._offset
         return gpio.lib.gpiod_line_offset(self._line)
-    
+
     @property
     def name(self):
         self._is_open()
@@ -195,7 +203,7 @@ class Line:
         if n == gpio.ffi.NULL:
             return None
         return n
-    
+
     @property
     def consumer(self):
         if self._line is None:
@@ -204,7 +212,7 @@ class Line:
         if n == gpio.ffi.NULL:
             return None
         return gpio.ffi.string(n).decode("utf-8")
-    
+
     def monitor(self, type=gpio.REQUEST_EVENT_RISING_EDGE, flags=0):
         """
         Monitor events.
@@ -235,8 +243,10 @@ class Line:
 
     def __iter__(self):
         raise RuntimeError("You need to use 'async for'")
+
     def __aenter__(self):
         raise RuntimeError("YOu need to use 'with'")
+
     def __aexit__(self):
         raise RuntimeError("YOu need to use 'with'")
 
@@ -244,7 +254,7 @@ class Line:
         if self._state != _IN_EV:
             raise RuntimeError("You need to call 'with LINE.monitor() / async for event in LINE'")
         return self
-    
+
     async def __anext__(self):
         if self._state != _IN_EV:
             raise RuntimeError("wrong state")
@@ -259,14 +269,16 @@ class Line:
         if r != 0:
             raise OSError("unable to read update")
         return Event(ev)
-    
+
     async def aclose(self):
         """close the iterator."""
         pass
 
+
 class Event:
     """Store a Pythonic representation of an event
     """
+
     def __init__(self, ev):
         if ev.event_type == gpio.EVENT_RISING_EDGE:
             self.value = 1
@@ -280,13 +292,12 @@ class Event:
     @property
     def timestamp(self):
         """Return a (second,nanosecond) tuple for fast timestamping"""
-        return (self._ts_sec,self._ts_nsec)
+        return (self._ts_sec, self._ts_nsec)
 
     @property
     def time(self):
         """Return the event's proper datetime"""
-        return datetime.datetime.fromtimestamp(self._ts_sec + self._ts_nsec/1000000000)
+        return datetime.datetime.fromtimestamp(self._ts_sec + self._ts_nsec / 1000000000)
 
     def __repr__(self):
         return "<%s @%s>" % (self.value, self.time)
-

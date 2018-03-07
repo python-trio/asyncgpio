@@ -1,6 +1,5 @@
 import trio_gpio as gpio
 import time
-
 """Flash an output manually.
 
 On the Pi3, control the LEDs thus:

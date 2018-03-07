@@ -2,7 +2,6 @@
 
 # Copyright (c) 2018 Matthias Urlichs <matthias@urlichs.de>
 # Based on work Copyright (c) 2018 Steven P. Goldsmith
-
 """
 libgpiod CFFI interface
 -------------
@@ -14,27 +13,28 @@ and doesn't implement an event loop (that's Trio's job).
 from cffi import FFI
 
 __all__ = [
-	"DIRECTION_INPUT",
-	"DIRECTION_OUTPUT",
-	"ACTIVE_STATE_HIGH",
-	"ACTIVE_STATE_LOW",
-	"REQUEST_DIRECTION_AS_IS",
-	"REQUEST_DIRECTION_INPUT",
-	"REQUEST_DIRECTION_OUTPUT",
-	"REQUEST_EVENT_FALLING_EDGE",
-	"REQUEST_EVENT_RISING_EDGE",
-	"REQUEST_EVENT_BOTH_EDGES",
-	"REQUEST_FLAG_OPEN_DRAIN",
-	"REQUEST_FLAG_OPEN_SOURCE",
-	"REQUEST_FLAG_ACTIVE_LOW",
-	"EVENT_RISING_EDGE",
-	"EVENT_FALLING_EDGE",
-	"ffi",
-	"lib",
+    "DIRECTION_INPUT",
+    "DIRECTION_OUTPUT",
+    "ACTIVE_STATE_HIGH",
+    "ACTIVE_STATE_LOW",
+    "REQUEST_DIRECTION_AS_IS",
+    "REQUEST_DIRECTION_INPUT",
+    "REQUEST_DIRECTION_OUTPUT",
+    "REQUEST_EVENT_FALLING_EDGE",
+    "REQUEST_EVENT_RISING_EDGE",
+    "REQUEST_EVENT_BOTH_EDGES",
+    "REQUEST_FLAG_OPEN_DRAIN",
+    "REQUEST_FLAG_OPEN_SOURCE",
+    "REQUEST_FLAG_ACTIVE_LOW",
+    "EVENT_RISING_EDGE",
+    "EVENT_FALLING_EDGE",
+    "ffi",
+    "lib",
 ]
 
 ffi = FFI()
-ffi.cdef("""
+ffi.cdef(
+    """
 enum {
 	GPIOD_CTXLESS_EVENT_CB_TIMEOUT,
 	GPIOD_CTXLESS_EVENT_CB_RISING_EDGE,
@@ -294,7 +294,8 @@ struct gpiod_line *
 gpiod_line_iter_next(struct gpiod_line_iter *iter);
 
 const char *gpiod_version_string(void);
-""")
+"""
+)
 
 lib = ffi.dlopen("libgpiod.so")
 
@@ -314,4 +315,3 @@ REQUEST_FLAG_OPEN_SOURCE = lib.GPIOD_LINE_REQUEST_FLAG_OPEN_SOURCE
 REQUEST_FLAG_ACTIVE_LOW = lib.GPIOD_LINE_REQUEST_FLAG_ACTIVE_LOW
 EVENT_RISING_EDGE = lib.GPIOD_LINE_EVENT_RISING_EDGE
 EVENT_FALLING_EDGE = lib.GPIOD_LINE_EVENT_FALLING_EDGE
-
