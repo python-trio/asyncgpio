@@ -297,7 +297,7 @@ const char *gpiod_version_string(void);
 """
 )
 
-lib = ffi.dlopen("libgpiod.so")
+lib = ffi.dlopen("libgpiod.so.1")
 
 DIRECTION_INPUT = lib.GPIOD_LINE_REQUEST_DIRECTION_INPUT
 DIRECTION_OUTPUT = lib.GPIOD_LINE_REQUEST_DIRECTION_OUTPUT
