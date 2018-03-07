@@ -2,14 +2,28 @@ from . import libgpiod as gpio
 
 import sys
 import trio
+import datetime
 
 class Chip:
+    """Represents a GPIO chip.
+
+    Arguments:
+        num: Chip number. Defaults to zero.
+
+        consumer: A string for display by kernel utilities.
+            Defaults to the program's name.
+
+    """
     _chip = None
-    def __init__(self, num):
-        self.num = num
+    def __init__(self, num=0, consumer=sys.argv[0]):
+        self._num = num
+        self._consumer = consumer
     
+    def __repr__(self):
+        return "%s(%s)" % (self.__class__.__name, self._num)
+
     def __enter__(self):
-        self._chip = gpio.lib.gpiod_chip_open_by_number(self.num)
+        self._chip = gpio.lib.gpiod_chip_open_by_number(self._num)
         if self._chip == gpio.ffi.NULL:
             raise OSError("unable to open chip")
         return self
@@ -18,8 +32,16 @@ class Chip:
         gpio.lib.gpiod_chip_close(self._chip)
         self._chip = None
 
-    def line(self, offset):
-        return Line(self, offset)
+    def line(self, offset, consumer=None):
+        """Get a descriptor for a single GPIO line.
+
+        Arguments:
+            offset: GPIO number within this chip. No default.
+            consumer: override the chip's consumer, if required.
+        """
+        if consumer is None:
+            consumer = self._consumer
+        return Line(self, offset, consumer=consumer)
 
 _FREE = 0
 _PRE_IO = 1
@@ -29,6 +51,10 @@ _IN_EV = 4
 _IN_USE = {_IN_IO, _IN_EV}
 
 class Line:
+    """Represents a single GPIO line.
+
+    Create this object by calling :meth:`Chip.line`.
+    """
     _line = None
     _direction = None
     _flags = None
@@ -46,13 +72,17 @@ class Line:
 
     def open(self, direction=gpio.DIRECTION_INPUT, default=False, flags=0):
         """
-        Request a line for input or output.
+        Create a context manager for controlling this line's input or output.
 
+        Arguments:
+            direction: input or output. Default: gpio.DIRECTION_INPUT.
+            flags: to request pull-up/down resistors or open-collector outputs.
+            
         Example::
-            with Chip("/dev/gpiochip0") as gpiochip:
+            with gpio.Chip(0) as chip:
                 line = chip.line(16)
-                with line.open(direction=gpio.DIRECTION_INPUT):
-                    print(line.value)
+                with line.open(direction=gpio.DIRECTION_INPUT) as wire:
+                    print(wire.value)
         """
         if self._state in _IN_USE:
             raise OSError("This line is already in use")
@@ -63,6 +93,7 @@ class Line:
         return self
 
     def __enter__(self):
+        """Context management for use with :meth:`open` and :meth:`monitor`."""
         if self._state in _IN_USE:
             raise OSError("This line is already in use")
         if self._state == _FREE:
@@ -92,6 +123,16 @@ class Line:
             raise OSError("unable to set direction",r)
         self._state = _IN_IO
         return self
+
+    def _enter_ev(self):
+        req = gpio.ffi.new("struct gpiod_line_request_config*")
+        req.consumer = self.__consumer
+        req.request_type = self._type
+        req.flags = self._flags
+
+        if gpio.lib.gpiod_line_request(self._line, req, 0) != 0:
+            raise OSError("unable to request event monitoring")
+        self._state = _IN_EV
 
     def __exit__(self, *tb):
         if self._line is not None:
@@ -168,9 +209,13 @@ class Line:
         """
         Monitor events.
 
+        Arguments:
+            type: which edge to monitor
+            flags: REQUEST_FLAG_* values (ORed)
+
         Usage::
             
-            with Chip("/dev/gpiochip0") as gpiochip:
+            with gpio.Chip(0) as chip:
                 line = chip.line(13)
                 with line.monitor():
                     async for event in line:
@@ -182,16 +227,6 @@ class Line:
         self._type = type
         self._flags = flags
         return self
-
-    def _enter_ev(self):
-        req = gpio.ffi.new("struct gpiod_line_request_config*")
-        req.consumer = self.__consumer
-        req.request_type = self._type
-        req.flags = self._flags
-
-        if gpio.lib.gpiod_line_request(self._line, req, 0) != 0:
-            raise OSError("unable to request event monitoring")
-        self._state = _IN_EV
 
     def _update(self):
         self._is_open()
@@ -207,25 +242,51 @@ class Line:
 
     def __aiter__(self):
         if self._state != _IN_EV:
-            raise RuntimeError("You need to call 'with LINE.event() / async for event in LINE'")
+            raise RuntimeError("You need to call 'with LINE.monitor() / async for event in LINE'")
         return self
     
     async def __anext__(self):
         if self._state != _IN_EV:
             raise RuntimeError("wrong state")
 
-        event = gpio.ffi.new("struct gpiod_line_event*")
+        ev = gpio.ffi.new("struct gpiod_line_event*")
         fd = gpio.lib.gpiod_line_event_get_fd(self._line)
         if fd < 0:
             raise OSError("line is closed")
         await trio.hazmat.wait_readable(fd)
         self._is_open()
-        r = gpio.lib.gpiod_line_event_read_fd(fd, event)
+        r = gpio.lib.gpiod_line_event_read_fd(fd, ev)
         if r != 0:
             raise OSError("unable to read update")
-        return event
+        return Event(ev)
     
     async def aclose(self):
         """close the iterator."""
         pass
+
+class Event:
+    """Store a Pythonic representation of an event
+    """
+    def __init__(self, ev):
+        if ev.event_type == gpio.EVENT_RISING_EDGE:
+            self.value = 1
+        elif ev.event_type == gpio.EVENT_FALLING_EDGE:
+            self.value = 0
+        else:
+            raise RuntimeError("Unknown event type")
+        self._ts_sec = ev.ts.tv_sec
+        self._ts_nsec = ev.ts.tv_nsec
+
+    @property
+    def timestamp(self):
+        """Return a (second,nanosecond) tuple for fast timestamping"""
+        return (self._ts_sec,self._ts_nsec)
+
+    @property
+    def time(self):
+        """Return the event's proper datetime"""
+        return datetime.datetime.fromtimestamp(self._ts_sec + self._ts_nsec/1000000000)
+
+    def __repr__(self):
+        return "<%s @%s>" % (self.value, self.time)
 

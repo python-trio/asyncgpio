@@ -19,13 +19,7 @@ async def main():
                 n.start_soon(pling,out_)
                 with in_.monitor(gpio.REQUEST_EVENT_BOTH_EDGES):
                     async for e in in_:
-                        if e.event_type == gpio.EVENT_RISING_EDGE:
-                            r = "up"
-                        elif e.event_type == gpio.EVENT_FALLING_EDGE:
-                            r = "down"
-                        else:
-                            raise RuntimeError("Unknown event type",e.event_type)
-                        print(r,in_.value)
+                        print(e, "on" if e.value else "off", "at", e.time.strftime("%H:%M:%S"))
 
 if __name__ == "__main__":
     trio.run(main)
