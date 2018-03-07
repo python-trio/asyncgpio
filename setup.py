@@ -6,7 +6,7 @@ LONG_DESC = open("README.rst", encoding="utf-8").read()
 
 setup(
     name="trio-gpio",
-    version=__version__,
+    version=__version__,  # noqa: F821
     description="GPIO access via Trio and libgpiod",
     url="https://github.com/M-o-a-T/trio-gpio",
     long_description=open("README.rst").read(),

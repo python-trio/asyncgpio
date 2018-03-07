@@ -83,7 +83,7 @@ class Line:
         Arguments:
             direction: input or output. Default: gpio.DIRECTION_INPUT.
             flags: to request pull-up/down resistors or open-collector outputs.
-            
+
         Example::
             with gpio.Chip(0) as chip:
                 line = chip.line(16)
@@ -222,7 +222,7 @@ class Line:
             flags: REQUEST_FLAG_* values (ORed)
 
         Usage::
-            
+
             with gpio.Chip(0) as chip:
                 line = chip.line(13)
                 with line.monitor():

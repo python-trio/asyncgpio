@@ -36,97 +36,97 @@ ffi = FFI()
 ffi.cdef(
     """
 enum {
-	GPIOD_CTXLESS_EVENT_CB_TIMEOUT,
-	GPIOD_CTXLESS_EVENT_CB_RISING_EDGE,
-	GPIOD_CTXLESS_EVENT_CB_FALLING_EDGE,
+    GPIOD_CTXLESS_EVENT_CB_TIMEOUT,
+    GPIOD_CTXLESS_EVENT_CB_RISING_EDGE,
+    GPIOD_CTXLESS_EVENT_CB_FALLING_EDGE,
 };
 
 enum {
-	GPIOD_CTXLESS_EVENT_CB_RET_ERR = -1,
-	GPIOD_CTXLESS_EVENT_CB_RET_OK = 0,
-	GPIOD_CTXLESS_EVENT_CB_RET_STOP = 1,
+    GPIOD_CTXLESS_EVENT_CB_RET_ERR = -1,
+    GPIOD_CTXLESS_EVENT_CB_RET_OK = 0,
+    GPIOD_CTXLESS_EVENT_CB_RET_STOP = 1,
 };
 
 enum {
-	GPIOD_CTXLESS_EVENT_POLL_RET_STOP = -2,
-	GPIOD_CTXLESS_EVENT_POLL_RET_ERR = -1,
-	GPIOD_CTXLESS_EVENT_POLL_RET_TIMEOUT = 0,
+    GPIOD_CTXLESS_EVENT_POLL_RET_STOP = -2,
+    GPIOD_CTXLESS_EVENT_POLL_RET_ERR = -1,
+    GPIOD_CTXLESS_EVENT_POLL_RET_TIMEOUT = 0,
 };
 
 enum {
-	GPIOD_LINE_DIRECTION_INPUT,
-	GPIOD_LINE_DIRECTION_OUTPUT,
+    GPIOD_LINE_DIRECTION_INPUT,
+    GPIOD_LINE_DIRECTION_OUTPUT,
 };
 
 enum {
-	GPIOD_LINE_ACTIVE_STATE_HIGH,
-	GPIOD_LINE_ACTIVE_STATE_LOW,
+    GPIOD_LINE_ACTIVE_STATE_HIGH,
+    GPIOD_LINE_ACTIVE_STATE_LOW,
 };
 
 enum {
-	GPIOD_LINE_REQUEST_DIRECTION_AS_IS,
-	GPIOD_LINE_REQUEST_DIRECTION_INPUT,
-	GPIOD_LINE_REQUEST_DIRECTION_OUTPUT,
-	GPIOD_LINE_REQUEST_EVENT_FALLING_EDGE,
-	GPIOD_LINE_REQUEST_EVENT_RISING_EDGE,
-	GPIOD_LINE_REQUEST_EVENT_BOTH_EDGES,
+    GPIOD_LINE_REQUEST_DIRECTION_AS_IS,
+    GPIOD_LINE_REQUEST_DIRECTION_INPUT,
+    GPIOD_LINE_REQUEST_DIRECTION_OUTPUT,
+    GPIOD_LINE_REQUEST_EVENT_FALLING_EDGE,
+    GPIOD_LINE_REQUEST_EVENT_RISING_EDGE,
+    GPIOD_LINE_REQUEST_EVENT_BOTH_EDGES,
 };
 
 enum {
-	GPIOD_LINE_REQUEST_FLAG_OPEN_DRAIN = 1,
-	GPIOD_LINE_REQUEST_FLAG_OPEN_SOURCE = 2,
-	GPIOD_LINE_REQUEST_FLAG_ACTIVE_LOW = 4,
+    GPIOD_LINE_REQUEST_FLAG_OPEN_DRAIN = 1,
+    GPIOD_LINE_REQUEST_FLAG_OPEN_SOURCE = 2,
+    GPIOD_LINE_REQUEST_FLAG_ACTIVE_LOW = 4,
 };
 
 enum {
-	GPIOD_LINE_EVENT_RISING_EDGE,
-	GPIOD_LINE_EVENT_FALLING_EDGE,
+    GPIOD_LINE_EVENT_RISING_EDGE,
+    GPIOD_LINE_EVENT_FALLING_EDGE,
 };
 
 struct timespec {
-	long tv_sec;
-	long tv_nsec;
+    long tv_sec;
+    long tv_nsec;
 };
 
 struct gpiod_line {
-	unsigned int offset;
-	int direction;
-	int active_state;
-	bool used;
-	bool open_source;
-	bool open_drain;
-	int state;
-	bool up_to_date;
-	struct gpiod_chip *chip;
-	int fd;
-	char name[32];
-	char consumer[32];
+    unsigned int offset;
+    int direction;
+    int active_state;
+    bool used;
+    bool open_source;
+    bool open_drain;
+    int state;
+    bool up_to_date;
+    struct gpiod_chip *chip;
+    int fd;
+    char name[32];
+    char consumer[32];
 };
 
 struct gpiod_chip {
-	struct gpiod_line **lines;
-	unsigned int num_lines;
-	int fd;
-	char name[32];
-	char label[32];
+    struct gpiod_line **lines;
+    unsigned int num_lines;
+    int fd;
+    char name[32];
+    char label[32];
 };
 
 struct gpiod_ctxless_event_poll_fd {
-	int fd;
-	/**< File descriptor number. */
-	bool event;
-	/**< Indicates whether an event occurred on this file descriptor. */
+    int fd;
+    /**< File descriptor number. */
+    bool event;
+    /**< Indicates whether an event occurred on this file descriptor. */
 };
 
 struct gpiod_line_request_config {
-	const char *consumer;
-	int request_type;
-	int flags;
+    const char *consumer;
+    int request_type;
+    int flags;
 };
 
 struct gpiod_line_event {
-	struct timespec ts;
-	int event_type;
+    struct timespec ts;
+    int event_type;
 };
 
 struct gpiod_chip;
@@ -140,27 +140,27 @@ struct gpiod_line_iter;
 typedef void (*gpiod_ctxless_set_value_cb)(void *);
 
 typedef int (*gpiod_ctxless_event_handle_cb)(int, unsigned int,
-							const struct timespec *, void *);
+                            const struct timespec *, void *);
 
 typedef int (*gpiod_ctxless_event_poll_cb)(unsigned int,
-				struct gpiod_ctxless_event_poll_fd *,
-				const struct timespec *, void *);
+                struct gpiod_ctxless_event_poll_fd *,
+                const struct timespec *, void *);
 
 int gpiod_ctxless_set_value(const char *device, unsigned int offset, int value,
-				bool active_low, const char *consumer,
-				gpiod_ctxless_set_value_cb cb,
-				void *data);
+                bool active_low, const char *consumer,
+                gpiod_ctxless_set_value_cb cb,
+                void *data);
 
 int gpiod_ctxless_set_value_multiple(const char *device,
-						const unsigned int *offsets,
-						const int *values, unsigned int num_lines,
-						bool active_low, const char *consumer,
-						gpiod_ctxless_set_value_cb cb,
-						void *data);
-						
+                        const unsigned int *offsets,
+                        const int *values, unsigned int num_lines,
+                        bool active_low, const char *consumer,
+                        gpiod_ctxless_set_value_cb cb,
+                        void *data);
+
 int gpiod_ctxless_find_line(const char *name, char *chipname,
-				size_t chipname_size,
-				unsigned int *offset);
+                size_t chipname_size,
+                unsigned int *offset);
 
 struct gpiod_chip *gpiod_chip_open(const char *path);
 
@@ -207,42 +207,42 @@ int gpiod_line_update(struct gpiod_line *line);
 bool gpiod_line_needs_update(struct gpiod_line *line);
 
 int gpiod_line_request(struct gpiod_line *line,
-				const struct gpiod_line_request_config *config,
-				int default_val);
+                const struct gpiod_line_request_config *config,
+                int default_val);
 
 int gpiod_line_request_input(struct gpiod_line *line,
-					const char *consumer);
+                    const char *consumer);
 
 int gpiod_line_request_output(struct gpiod_line *line,
-					const char *consumer, int default_val);
+                    const char *consumer, int default_val);
 
 int gpiod_line_request_rising_edge_events(struct gpiod_line *line,
-						const char *consumer);
+                        const char *consumer);
 
 int gpiod_line_request_falling_edge_events(struct gpiod_line *line,
-						const char *consumer);
+                        const char *consumer);
 
 int gpiod_line_request_both_edges_events(struct gpiod_line *line,
-						const char *consumer);
+                        const char *consumer);
 
 int gpiod_line_request_input_flags(struct gpiod_line *line,
-					const char *consumer, int flags);
+                    const char *consumer, int flags);
 
 int gpiod_line_request_output_flags(struct gpiod_line *line,
-					const char *consumer, int flags,
-					int default_val);
+                    const char *consumer, int flags,
+                    int default_val);
 
 int gpiod_line_request_rising_edge_events_flags(struct gpiod_line *line,
-						const char *consumer,
-						int flags);
+                        const char *consumer,
+                        int flags);
 
 int gpiod_line_request_falling_edge_events_flags(struct gpiod_line *line,
-							const char *consumer,
-							int flags);
+                            const char *consumer,
+                            int flags);
 
 int gpiod_line_request_both_edges_events_flags(struct gpiod_line *line,
-							const char *consumer,
-							int flags);
+                            const char *consumer,
+                            int flags);
 
 void gpiod_line_release(struct gpiod_line *line);
 
@@ -255,10 +255,10 @@ int gpiod_line_get_value(struct gpiod_line *line);
 int gpiod_line_set_value(struct gpiod_line *line, int value);
 
 int gpiod_line_event_wait(struct gpiod_line *line,
-				const struct timespec *timeout);
+                const struct timespec *timeout);
 
 int gpiod_line_event_read(struct gpiod_line *line,
-				struct gpiod_line_event *event);
+                struct gpiod_line_event *event);
 
 int gpiod_line_event_get_fd(struct gpiod_line *line);
 
