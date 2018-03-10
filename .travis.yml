@@ -3,10 +3,11 @@ python:
   - 3.6
 sudo: false
 dist: trusty
-addons:
-  apt:
-    packages:
-    - libgpiod1
+## we need that for actual tests
+#addons:
+#  apt:
+#    packages:
+#    - libgpiod1
 
 env:
 - CHECK_DOCS=1
