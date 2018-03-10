@@ -300,7 +300,7 @@ const char *gpiod_version_string(void);
 try:
     lib = ffi.dlopen("libgpiod.so.1")
 except OSError:
-    lib = None # may fail if we're only building docs
+    lib = ffi.dlopen("c") # workaround if we're only building docs
 
 DIRECTION_INPUT = lib.GPIOD_LINE_REQUEST_DIRECTION_INPUT
 DIRECTION_OUTPUT = lib.GPIOD_LINE_REQUEST_DIRECTION_OUTPUT
@@ -318,3 +318,4 @@ REQUEST_FLAG_OPEN_SOURCE = lib.GPIOD_LINE_REQUEST_FLAG_OPEN_SOURCE
 REQUEST_FLAG_ACTIVE_LOW = lib.GPIOD_LINE_REQUEST_FLAG_ACTIVE_LOW
 EVENT_RISING_EDGE = lib.GPIOD_LINE_EVENT_RISING_EDGE
 EVENT_FALLING_EDGE = lib.GPIOD_LINE_EVENT_FALLING_EDGE
+
