@@ -11,6 +11,7 @@ PATH := /usr/share/sphinx/scripts/python3:${PATH}
 
 PACKAGE = trio_gpio
 PYTHON ?= python3
+SPHINX ?= sphinx3-build
 export PYTHONPATH=$(shell pwd)
 
 PYTEST ?= ${PYTHON} $(shell which pytest-3)
@@ -33,7 +34,7 @@ SPHINXBUILDDIR ?= $(BUILD_DIR)/sphinx/html
 ALLSPHINXOPTS ?= -d $(BUILD_DIR)/sphinx/doctrees $(SPHINXOPTS) docs
 
 doc:
-	sphinx3-build -a $(INPUT_DIR) $(BUILD_DIR)
+	$(SPHINX) -a $(INPUT_DIR) $(BUILD_DIR)
 
 livehtml: docs
 	sphinx-autobuild $(AUTOSPHINXOPTS) $(ALLSPHINXOPTS) $(SPHINXBUILDDIR)
