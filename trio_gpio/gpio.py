@@ -9,23 +9,33 @@ class Chip:
     """Represents a GPIO chip.
 
     Arguments:
-        num: Chip number. Defaults to zero.
+        label: Chip label. Run "gpiodetect" to list GPIO chip labels.
+
+        num: Chip number. Deprecated. Defaults to zero.
+            Only used if you don't use a label.
 
         consumer: A string for display by kernel utilities.
-            Defaults to the program's name.
+            Defaults to the program name.
 
     """
     _chip = None
 
-    def __init__(self, num=0, consumer=sys.argv[0]):
+    def __init__(self, num=0, label=None, consumer=sys.argv[0]):
         self._num = num
+        self._label = label
         self._consumer = consumer
 
     def __repr__(self):
-        return "%s(%s)" % (self.__class__.__name, self._num)
+        if self._label is None:
+            return "%s(%d)" % (self.__class__.__name, self._num)
+        else:
+            return "%s(%s)" % (self.__class__.__name, self._label)
 
     def __enter__(self):
-        self._chip = gpio.lib.gpiod_chip_open_by_number(self._num)
+        if self._label is None:
+            self._chip = gpio.lib.gpiod_chip_open_by_number(self._num)
+        else:
+            self._chip = gpio.lib.gpiod_chip_open_by_label(self._label)
         if self._chip == gpio.ffi.NULL:
             raise OSError("unable to open chip")
         return self
