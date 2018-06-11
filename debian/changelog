@@ -1,3 +1,9 @@
+trio-gpio (0.2.3-2) unstable; urgency=medium
+
+  * TL;DR: didn't RTFM
+
+ -- Matthias Urlichs <matthias@urlichs.de>  Mon, 11 Jun 2018 09:08:30 +0200
+
 trio-gpio (0.2.2-1) unstable; urgency=medium
 
   * Access errno
