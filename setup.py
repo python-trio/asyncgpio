@@ -17,6 +17,11 @@ setup(
     install_requires=[
         "trio",
         "cffi",
+        "pyyaml",
+        "trio-gpio",
+        "trio-click",
+        "trio-amqp",
+        "async-generator",
     ],
     keywords=[
         "gpio",
