@@ -7,10 +7,10 @@ This script oggles a pin and watches another. The two are presumed to be connect
 
 async def pling(line):
     while True:
+        await trio.sleep(1)
         line.value = 1
         await trio.sleep(1)
         line.value = 0
-        await trio.sleep(1)
 
 
 async def main():
