@@ -137,6 +137,8 @@ class Line:
             self.__exit__()
             raise RuntimeError("Unknown direction", r)
         if r != 0:
+            if r < 0:
+                r = gpio.ffi.errno
             self.__exit__()
             raise OSError("unable to set direction", r)
         self._state = _IN_IO
@@ -149,7 +151,7 @@ class Line:
         req.flags = self._flags
 
         if gpio.lib.gpiod_line_request(self._line, req, 0) != 0:
-            raise OSError("unable to request event monitoring")
+            raise OSError("unable to request event monitoring", gpio.ffi.errno)
         self._state = _IN_EV
 
     def __exit__(self, *tb):
@@ -277,7 +279,9 @@ class Line:
         self._is_open()
         r = gpio.lib.gpiod_line_event_read_fd(fd, ev)
         if r != 0:
-            raise OSError("unable to read update")
+            if r < 0:
+                r = gpio.ffi.errno
+            raise OSError("unable to read update", r)
         return Event(ev)
 
     async def aclose(self):
