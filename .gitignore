@@ -28,6 +28,7 @@ __pycache__/
 *.egg-info/
 .installed.cfg
 *.egg
+/.pytest_cache/
 
 # Installer logs
 pip-log.txt
