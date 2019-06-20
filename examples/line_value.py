@@ -1,4 +1,4 @@
-import trio_gpio as gpio
+import asyncgpio as gpio
 import time
 """Flash an output manually.
 

@@ -1,7 +1,7 @@
 [tool.towncrier]
-package = "trio_gpio"
+package = "asyncgpio"
 filename = "docs/source/history.rst"
 directory = "newsfragments"
 underlines = ["-", "~", "^"]
 # COOKIECUTTER-TRIO-TODO: fill in the URL below to point to your issue tracker:
-issue_format = "`#{issue} <https://github.com/python-trio/trio-gpio/issues/{issue}>`__"
+issue_format = "`#{issue} <https://github.com/python-trio/asyncgpio/issues/{issue}>`__"

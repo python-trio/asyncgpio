@@ -1,6 +1,6 @@
 [run]
 branch=True
-source=trio_gpio
+source=asyncgpio
 
 [report]
 precision = 1

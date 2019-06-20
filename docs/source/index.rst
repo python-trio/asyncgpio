@@ -5,7 +5,7 @@
 
 
 ============================================
-trio-gpio: GPIO access via Trio and libgpiod
+asyncgpio: GPIO access via Trio and libgpiod
 ============================================
 
 Trio-GPIO is a simple wrapper around ``libgpiod``.

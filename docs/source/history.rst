@@ -1,6 +1,6 @@
 Release history
 ===============
 
-.. currentmodule:: trio_gpio
+.. currentmodule:: asyncgpio
 
 .. towncrier release notes start

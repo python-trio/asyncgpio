@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
 
-exec(open("trio_gpio/_version.py", encoding="utf-8").read())
+exec(open("asyncgpio/_version.py", encoding="utf-8").read())
 
 LONG_DESC = open("README.rst", encoding="utf-8").read()
 
 setup(
-    name="trio-gpio",
+    name="asyncgpio",
     version=__version__,  # noqa: F821
     description="GPIO access via Trio and libgpiod",
-    url="https://github.com/M-o-a-T/trio-gpio",
+    url="https://github.com/M-o-a-T/asyncgpio",
     long_description=open("README.rst").read(),
     author="Matthias Urlichs",
     author_email="matthias@urlichs.de",
@@ -17,10 +17,6 @@ setup(
     install_requires=[
         "trio",
         "cffi",
-        "pyyaml",
-        "trio-gpio",
-        "trio-click",
-        "trio-amqp",
         "async-generator",
     ],
     keywords=[

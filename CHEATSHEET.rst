@@ -16,16 +16,16 @@ To run yapf
 -----------
 
 * Show what changes yapf wants to make: ``yapf -rpd setup.py
-  trio_gpio tests``
+  asyncgpio tests``
 
 * Apply all changes directly to the source tree: ``yapf -rpi setup.py
-  trio_gpio tests``
+  asyncgpio tests``
 
 
 To make a release
 -----------------
 
-* Update the version in ``trio_gpio/_version.py``
+* Update the version in ``asyncgpio/_version.py``
 
 * Run ``towncrier`` to collect your release notes.
 

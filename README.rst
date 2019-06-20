@@ -1,4 +1,4 @@
-trio-gpio
+asyncgpio
 =========
 
 Trio-GPIO allows easy access to the GPIO pins on your Raspberry Pi or

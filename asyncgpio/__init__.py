@@ -1,4 +1,4 @@
-"""Top-level package for trio-gpio."""
+"""Top-level package for asyncgpio."""
 
 import sys
 
@@ -18,6 +18,6 @@ def open_chip(num=0, consumer=sys.argv[0]):
             Defaults to the program's name.
 
     Returns:
-        a :class:`trio_gpio.gpio.Chip` instance.
+        a :class:`asyncgpio.gpio.Chip` instance.
     """
     return Chip(num, consumer=consumer)

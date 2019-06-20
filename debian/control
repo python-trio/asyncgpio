@@ -1,26 +1,18 @@
-Source: trio-gpio
+Source: asyncgpio
 Maintainer: Matthias Urlichs <matthias@urlichs.de>
 Section: python
 Priority: optional
 Build-Depends: dh-python, python3-setuptools, python3-all, debhelper (>= 9),
   libgpiod-dev,
   python3-cffi,
-  python3-trio-amqp,
-  python3-trio-click,
-  python3-trio-gpio,
-  python3-yaml,
 Standards-Version: 3.9.6
-Homepage: https://github.com/M-o-a-T/trio-gpio
+Homepage: https://github.com/M-o-a-T/asyncgpio
 
-Package: python3-trio-gpio
+Package: python3-asyncgpio
 Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends},
   libgpiod1,
   python3-cffi,
-  python3-trio-amqp,
-  python3-trio-click,
-  python3-trio-gpio,
-  python3-yaml,
 Standards-Version: 3.9.6
 Description: GPIO access via Trio and libgpiod
  Trio-GPIO allows easy access to the GPIO pins on your Raspberry Pi or
