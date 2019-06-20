@@ -13,6 +13,7 @@ Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends},
   libgpiod1,
   python3-cffi,
+  python3-trio,
 Standards-Version: 3.9.6
 Description: GPIO access via Trio and libgpiod
  Trio-GPIO allows easy access to the GPIO pins on your Raspberry Pi or

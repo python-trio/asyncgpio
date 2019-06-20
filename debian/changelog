@@ -1,40 +1,46 @@
-asyncgpio (0.2.4-1) unstable; urgency=medium
+asyncgpio (0.3.0-1) unstable; urgency=medium
+
+  * Renamed.
+
+ -- Matthias Urlichs <matthias@urlichs.de>  Thu, 20 Jun 2019 13:01:02 +0200
+
+trio-gpio (0.2.4-1) unstable; urgency=medium
 
   * New release
 
  -- Matthias Urlichs <matthias@urlichs.de>  Mon, 11 Jun 2018 21:29:33 +0200
 
-asyncgpio (0.2.3-2) unstable; urgency=medium
+trio-gpio (0.2.3-2) unstable; urgency=medium
 
   * TL;DR: didn't RTFM
 
  -- Matthias Urlichs <matthias@urlichs.de>  Mon, 11 Jun 2018 09:08:30 +0200
 
-asyncgpio (0.2.2-1) unstable; urgency=medium
+trio-gpio (0.2.2-1) unstable; urgency=medium
 
   * Access errno
 
  -- Matthias Urlichs <matthias@urlichs.de>  Mon, 11 Jun 2018 08:29:53 +0200
 
-asyncgpio (0.2.1-1) unstable; urgency=medium
+trio-gpio (0.2.1-1) unstable; urgency=medium
 
   * Allow (and prefer) the GPIO chip label instead of its number.
 
  -- Matthias Urlichs <matthias@urlichs.de>  Mon, 11 Jun 2018 04:48:44 +0200
 
-asyncgpio (0.1.1-2) unstable; urgency=medium
+trio-gpio (0.1.1-2) unstable; urgency=medium
 
   * Cleanup 2
 
  -- Matthias Urlichs <matthias@urlichs.de>  Mon, 28 May 2018 02:35:07 +0200
 
-asyncgpio (0.1.1-1) unstable; urgency=medium
+trio-gpio (0.1.1-1) unstable; urgency=medium
 
   * Cleanup
 
  -- Matthias Urlichs <matthias@urlichs.de>  Sat, 10 Mar 2018 18:36:19 +0100
 
-asyncgpio (0.1.0-1) unstable; urgency=low
+trio-gpio (0.1.0-1) unstable; urgency=low
 
   * source package automatically created by stdeb 0.8.5
 
