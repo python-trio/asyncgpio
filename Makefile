@@ -43,14 +43,12 @@ test:
 	$(PYTEST) $(PACKAGE) $(TEST_OPTIONS)
 
 
-tag:
-		@git tag v$(shell python3 setup.py -V)
+tagged:
+	git describe --tags --exact-match
+	test $$(git ls-files -m | wc -l) = 0
 
-pypi:   tag
-	@if python3 setup.py -V 2>/dev/null | grep -qs + >/dev/null 2>&1 ; \
-		then echo "You need a clean, tagged tree" >&2; exit 1 ; fi
+pypi:   tagged
 	python3 setup.py sdist upload
-	## version depends on tag, so re-tagging doesn't make sense
 
 upload: pypi
 	git push-all --tags

@@ -2,8 +2,6 @@
 
 import sys
 
-from ._version import __version__  # noqa
-
 from .gpio import Chip
 from .libgpiod import *  # noqa
 

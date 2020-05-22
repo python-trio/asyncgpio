@@ -1,12 +1,10 @@
 from setuptools import setup, find_packages
 
-exec(open("asyncgpio/_version.py", encoding="utf-8").read())
-
 LONG_DESC = open("README.rst", encoding="utf-8").read()
 
 setup(
     name="asyncgpio",
-    version=__version__,  # noqa: F821
+    use_scm_version={"version_scheme": "guess-next-dev", "local_scheme": "dirty-tag"},
     description="GPIO access via Trio and libgpiod",
     url="https://github.com/M-o-a-T/asyncgpio",
     long_description=open("README.rst").read(),
@@ -14,6 +12,7 @@ setup(
     author_email="matthias@urlichs.de",
     license="MIT -or- Apache License 2.0",
     packages=find_packages(),
+    setup_requires=["setuptools_scm"],
     install_requires=[
         "trio",
         "cffi",
