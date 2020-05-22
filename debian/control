@@ -3,7 +3,7 @@ Maintainer: Matthias Urlichs <matthias@urlichs.de>
 Section: python
 Priority: optional
 Build-Depends: dh-python, python3-setuptools, python3-all, debhelper (>= 9),
-  libgpiod-dev,
+  libgpiod-dev (>= 1.4),
   python3-cffi,
 Standards-Version: 3.9.6
 Homepage: https://github.com/M-o-a-T/asyncgpio
@@ -11,7 +11,7 @@ Homepage: https://github.com/M-o-a-T/asyncgpio
 Package: python3-asyncgpio
 Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends},
-  libgpiod1,
+  libgpiod2 (>= 1.4),
   python3-cffi,
   python3-trio,
 Standards-Version: 3.9.6
@@ -22,4 +22,5 @@ Description: GPIO access via Trio and libgpiod
  It is based on libgpiod and its CFFI adapter by Steven P. Goldsmith
  <sgjava@gmail.com>, as downloaded from
  `https://github.com/sgjava/userspaceio.git`__.
-
+ .
+ This version has been updated to libgpiod 1.4.

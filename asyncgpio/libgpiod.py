@@ -36,7 +36,7 @@ ffi = FFI()
 ffi.cdef(
     """
 enum {
-    GPIOD_CTXLESS_EVENT_CB_TIMEOUT,
+    GPIOD_CTXLESS_EVENT_CB_TIMEOUT = 1,
     GPIOD_CTXLESS_EVENT_CB_RISING_EDGE,
     GPIOD_CTXLESS_EVENT_CB_FALLING_EDGE,
 };
@@ -54,17 +54,17 @@ enum {
 };
 
 enum {
-    GPIOD_LINE_DIRECTION_INPUT,
+    GPIOD_LINE_DIRECTION_INPUT = 1,
     GPIOD_LINE_DIRECTION_OUTPUT,
 };
 
 enum {
-    GPIOD_LINE_ACTIVE_STATE_HIGH,
+    GPIOD_LINE_ACTIVE_STATE_HIGH = 1,
     GPIOD_LINE_ACTIVE_STATE_LOW,
 };
 
 enum {
-    GPIOD_LINE_REQUEST_DIRECTION_AS_IS,
+    GPIOD_LINE_REQUEST_DIRECTION_AS_IS = 1,
     GPIOD_LINE_REQUEST_DIRECTION_INPUT,
     GPIOD_LINE_REQUEST_DIRECTION_OUTPUT,
     GPIOD_LINE_REQUEST_EVENT_FALLING_EDGE,
@@ -79,7 +79,7 @@ enum {
 };
 
 enum {
-    GPIOD_LINE_EVENT_RISING_EDGE,
+    GPIOD_LINE_EVENT_RISING_EDGE = 1,
     GPIOD_LINE_EVENT_FALLING_EDGE,
 };
 
@@ -137,6 +137,8 @@ struct gpiod_chip_iter;
 
 struct gpiod_line_iter;
 
+struct gpiod_line_bulk;
+
 typedef void (*gpiod_ctxless_set_value_cb)(void *);
 
 typedef int (*gpiod_ctxless_event_handle_cb)(int, unsigned int,
@@ -162,6 +164,9 @@ int gpiod_ctxless_find_line(const char *name, char *chipname,
                 size_t chipname_size,
                 unsigned int *offset);
 
+int gpiod_chip_find_lines(struct gpiod_chip *chip, const char **names,
+                         struct gpiod_line_bulk *bulk) GPIOD_API;
+
 struct gpiod_chip *gpiod_chip_open(const char *path);
 
 struct gpiod_chip *gpiod_chip_open_by_name(const char *name);
@@ -182,6 +187,13 @@ unsigned int gpiod_chip_num_lines(struct gpiod_chip *chip);
 
 struct gpiod_line *
 gpiod_chip_get_line(struct gpiod_chip *chip, unsigned int offset);
+
+int gpiod_chip_get_lines(struct gpiod_chip *chip,
+                         unsigned int *offsets, unsigned int num_offsets,
+                         struct gpiod_line_bulk *bulk);
+
+int gpiod_chip_get_all_lines(struct gpiod_chip *chip,
+                             struct gpiod_line_bulk *bulk);
 
 struct gpiod_line *
 gpiod_chip_find_line(struct gpiod_chip *chip, const char *name);
@@ -254,6 +266,9 @@ int gpiod_line_get_value(struct gpiod_line *line);
 
 int gpiod_line_set_value(struct gpiod_line *line, int value);
 
+int gpiod_line_set_value_bulk(struct gpiod_line_bulk *bulk,
+                              const int *values);
+
 int gpiod_line_event_wait(struct gpiod_line *line,
                 const struct timespec *timeout);
 
@@ -298,7 +313,7 @@ const char *gpiod_version_string(void);
 )
 
 try:
-    lib = ffi.dlopen("libgpiod.so.1")
+    lib = ffi.dlopen("libgpiod.so.2")
 except OSError:
     lib = ffi.dlopen("c")  # workaround if we're only building docs
 
