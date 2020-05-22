@@ -1,4 +1,4 @@
-import trio
+import anyio
 import asyncgpio as gpio
 """
 This script oggles a pin and watches another. The two are presumed to be connected (hardware wire).
@@ -8,9 +8,9 @@ This script oggles a pin and watches another. The two are presumed to be connect
 async def pling(line):
     while True:
         line.value = 1
-        await trio.sleep(1)
+        await anyio.sleep(1)
         line.value = 0
-        await trio.sleep(1)
+        await anyio.sleep(1)
 
 
 async def main():
@@ -21,8 +21,8 @@ async def main():
                 await n.spawn(pling, out_)
                 while True:
                     print(in_.value)
-                    await trio.sleep(0.3)
+                    await anyio.sleep(0.3)
 
 
 if __name__ == "__main__":
-    trio.run(main, backend="trio")
+    anyio.run(main, backend="trio")

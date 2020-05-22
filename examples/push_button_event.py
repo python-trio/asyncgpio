@@ -1,15 +1,15 @@
 import time
-import trio
-import trio_gpio as gpio
+import anyio
+import asyncgpio as gpio
 
 """
 This example is taken out of my furnace controller.
-It has been tested with Raspberry Pi Zero W and I assume it will work with any board supported by trio_gpio.
+It has been tested with Raspberry Pi Zero W and I assume it will work with any board supported by asyncgpio.
 Use at your own risk.
 
 If you aren't sure about how to hook up a button and led to your board, there are a lot of examples online.
 
-Thank you @smurfix, who wrote trio_gpio and @njsmith and other in glitter:python-trio/general room
+Thank you @smurfix, who wrote asyncgpio and @njsmith and other in glitter:python-trio/general room
 who helped me out.
 """
 
@@ -20,31 +20,31 @@ class Led:
 	# called at the same time or trio might await at the wrong spot.
 	def __init__(self, line):
 		self.x = line
-		self._on = trio.Event()
-		self._off = trio.Event()
+		self._on = anyio.create_event()
+		self._off = anyio.create_event()
 
 	async def liteon(self):
 		with gpio.open_chip() as chip:
 			with chip.line(self.x).open(direction=gpio.DIRECTION_OUTPUT) as line:
 				self._on.clear()
-				self._off.set()
+				await self._off.set()
 				while True:
 					if self._on.is_set():
 						line.value = 1
 						# print('lite on')
 						await self._off.wait()
-						self._on.clear()
+						self._on = anyio.create_event()
 					elif self._off.is_set():
 						line.value = 0
 						# print('lite off')d
 						await self._on.wait()
-						self._off.clear()
+						self._off = anyio.create_event()
 					else:
 						# should never be reached.
 						# if the code does reach here,
 						# turn off the power to whatever is being powered
 						print('error: both are off.')
-						self._off.set()
+						await self._off.set()
 
 
 class Button:
@@ -69,20 +69,23 @@ class Button:
 					now = float(str(secs)+'.'+str(ns_secs))
 					if now >= last + .25:
 						print('button', e.value, secs, ns_secs, now)
-						self._off.set() if self._on.is_set() else self._on.set()
+						if self._on.is_set():
+							await self._off.set()
+						else:
+							await self._on.set()
 					last = now
 
-# Trio-gpio uses the BCM pin numbering. So, the led is on the pin 21 
+# Asyncgpio uses the BCM pin numbering. So, the led is on the pin 21 
 # and the button that controls the yellow is hooked to pin 23.
 yellow = Led(21) 
 yellowbutton = Button(23, yellow._on, yellow._off)
 
 
 async def main(y):
-	async with trio.open_nursery() as nursery:
-		nursery.start_soon(yellowbutton.push)
-		nursery.start_soon(yellow.liteon)
+	async with anyio.create_task_group() as nursery:
+		await nursery.spawn(yellowbutton.push)
+		await nursery.spawn(yellow.liteon)
 
 
 if __name__ == "__main__":
-    trio.run(main, 1)
+    anyio.run(main, 1, backend="trio")
