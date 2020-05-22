@@ -165,7 +165,7 @@ int gpiod_ctxless_find_line(const char *name, char *chipname,
                 unsigned int *offset);
 
 int gpiod_chip_find_lines(struct gpiod_chip *chip, const char **names,
-                         struct gpiod_line_bulk *bulk) GPIOD_API;
+                         struct gpiod_line_bulk *bulk);
 
 struct gpiod_chip *gpiod_chip_open(const char *path);
 

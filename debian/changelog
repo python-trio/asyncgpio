@@ -1,3 +1,9 @@
+asyncgpio (0.4.0-2) unstable; urgency=medium
+
+  * Edit error
+
+ -- Matthias Urlichs <matthias@urlichs.de>  Fri, 22 May 2020 21:12:43 +0200
+
 asyncgpio (0.4.0-1) unstable; urgency=medium
 
   * Update to libgpiod 1.4.
