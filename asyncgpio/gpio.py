@@ -20,9 +20,11 @@ class Chip:
     """
     _chip = None
 
-    def __init__(self, num=0, label=None, consumer=sys.argv[0]):
+    def __init__(self, num=None, label=None, consumer=sys.argv[0]):
         self._num = num
         self._label = label
+        if (num is None) == (label is None):
+            raise ValueError("Specify either label or num")
         self._consumer = consumer
 
     def __repr__(self):
@@ -35,7 +37,7 @@ class Chip:
         if self._label is None:
             self._chip = gpio.lib.gpiod_chip_open_by_number(self._num)
         else:
-            self._chip = gpio.lib.gpiod_chip_open_by_label(self._label)
+            self._chip = gpio.lib.gpiod_chip_open_by_label(self._label.encode("utf-8"))
         if self._chip == gpio.ffi.NULL:
             raise OSError("unable to open chip")
         return self
