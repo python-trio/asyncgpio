@@ -20,9 +20,11 @@ class Chip:
     """
     _chip = None
 
-    def __init__(self, num=0, label=None, consumer=sys.argv[0]):
+    def __init__(self, num=None, label=None, consumer=sys.argv[0]):
         self._num = num
         self._label = label
+        if (num is None) == (label is None):
+            raise ValueError("Specify either label or num")
         self._consumer = consumer
 
     def __repr__(self):
