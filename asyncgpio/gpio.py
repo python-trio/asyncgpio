@@ -37,7 +37,7 @@ class Chip:
         if self._label is None:
             self._chip = gpio.lib.gpiod_chip_open_by_number(self._num)
         else:
-            self._chip = gpio.lib.gpiod_chip_open_by_label(self._label)
+            self._chip = gpio.lib.gpiod_chip_open_by_label(self._label.encode("utf-8"))
         if self._chip == gpio.ffi.NULL:
             raise OSError("unable to open chip")
         return self
