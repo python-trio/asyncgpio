@@ -14,7 +14,7 @@ setup(
     packages=find_packages(),
     setup_requires=["setuptools_scm"],
     install_requires=[
-        "trio",
+        "trio >= 0.15",
         "cffi",
         "async-generator",
     ],

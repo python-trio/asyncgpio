@@ -8,6 +8,8 @@ Using AsyncGPIO generally consists of three steps:
 Accessing the chip, referring to a GPIO line within that chip.
 and actually using the line for input, output, or monitoring.
 
+AsyncGPIO currently only works with anyio's Trio backend.
+
 Accessing a GPIO chip
 ---------------------
 

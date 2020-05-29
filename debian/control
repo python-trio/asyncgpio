@@ -6,6 +6,7 @@ Build-Depends: dh-python, python3-setuptools, python3-all, debhelper (>= 9),
   libgpiod-dev (>= 1.4),
   python3-cffi,
   python3-setuptools-scm,
+  python3-trio (>= 0.15),
 Standards-Version: 3.9.6
 Homepage: https://github.com/M-o-a-T/asyncgpio
 
@@ -14,10 +15,10 @@ Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends},
   libgpiod2 (>= 1.4),
   python3-cffi,
-  python3-trio,
+  python3-trio (>= 0.15),
 Standards-Version: 3.9.6
 Description: GPIO access via Trio and libgpiod
- Trio-GPIO allows easy access to the GPIO pins on your Raspberry Pi or
+ AsyncGPIO allows easy access to the GPIO pins on your Raspberry Pi or
  similar embedded computer.
  .
  It is based on libgpiod and its CFFI adapter by Steven P. Goldsmith
