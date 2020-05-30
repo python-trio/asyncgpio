@@ -29,9 +29,9 @@ class Chip:
 
     def __repr__(self):
         if self._label is None:
-            return "%s(%d)" % (self.__class__.__name, self._num)
+            return "%s(%d)" % (self.__class__.__name__, self._num)
         else:
-            return "%s(%s)" % (self.__class__.__name, self._label)
+            return "%s(%s)" % (self.__class__.__name__, self._label)
 
     def __enter__(self):
         if self._label is None:
