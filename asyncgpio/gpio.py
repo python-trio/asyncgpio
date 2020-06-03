@@ -1,7 +1,7 @@
 from . import libgpiod as gpio
 
 import sys
-import trio
+import anyio
 import datetime
 
 
@@ -275,7 +275,7 @@ class Line:
         fd = gpio.lib.gpiod_line_event_get_fd(self._line)
         if fd < 0:
             raise OSError("line is closed")
-        await trio.lowlevel.wait_readable(fd)
+        await anyio.wait_socket_readable(fd)
         self._is_open()
         r = gpio.lib.gpiod_line_event_read_fd(fd, ev)
         if r != 0:
