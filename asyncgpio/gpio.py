@@ -149,7 +149,6 @@ class Line:
         req.consumer = self.__consumer
         req.request_type = self._type
         req.flags = self._flags
-
         if gpio.lib.gpiod_line_request(self._line, req, 0) != 0:
             raise OSError("unable to request event monitoring")
         self._state = _IN_EV
