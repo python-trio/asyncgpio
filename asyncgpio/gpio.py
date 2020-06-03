@@ -254,13 +254,13 @@ class Line:
             raise OSError("unable to update state")
 
     def __iter__(self):
-        raise RuntimeError("You need to use 'async for'")
+        raise RuntimeError("You need to use 'async for', not 'for'")
 
     def __aenter__(self):
-        raise RuntimeError("YOu need to use 'with'")
+        raise RuntimeError("You need to use 'with', not 'async with'")
 
     def __aexit__(self):
-        raise RuntimeError("YOu need to use 'with'")
+        raise RuntimeError("You need to use 'with', not 'async with'")
 
     def __aiter__(self):
         if self._state != _IN_EV:
