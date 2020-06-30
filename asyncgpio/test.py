@@ -91,6 +91,8 @@ class GpioWatcher:
     This class polls `/sys/kernel/debug/gpio` (can be overridden).
     """
 
+    tg = None  # for .run
+
     def __init__(
         self,
         interval: float = 0.2,
@@ -103,7 +105,7 @@ class GpioWatcher:
         #       self.names = {}
         self.sysfs_path = sysfs_path
         self.debugfs_path = debugfs_path
-        gpio_dir = os.path.join(sysfs_path, "class", "gpio")
+        # gpio_dir = os.path.join(sysfs_path, "class", "gpio")
 
     #       for d in os.listdir(gpio_dir):
     #           try:
@@ -154,24 +156,24 @@ class GpioWatcher:
         chip = None
         base = None
 
-        for l in self.gpio:
-            l = l.strip()
-            if not l:
+        for line in self.gpio:
+            line = line.strip()
+            if not line:
                 chip = None
                 continue
             if chip is None:
-                r = _r_chip.match(l)
+                r = _r_chip.match(line)
                 if not r:
-                    raise ValueError(l)
+                    raise ValueError(line)
                 chip = r.group("name")
                 if not chip:
                     chip = r.group("chip")
                 base = int(r.group("base"))
             else:
-                r = _r_pin.match(l)
+                r = _r_pin.match(line)
                 if not r:
                     breakpoint()
-                    raise ValueError(l)
+                    raise ValueError(line)
                 pin = int(r.group("pin")) - base
                 out = r.group("dir") == "out"
                 val = r.group("val") == "hi"
