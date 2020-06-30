@@ -11,5 +11,8 @@ else
 	@exit 1
 endif
 
-test:
+pytest:
 	sudo tests/test.sh
+
+.PHONY: modload
+
