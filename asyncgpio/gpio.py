@@ -18,6 +18,7 @@ class Chip:
             Defaults to the program name.
 
     """
+
     _chip = None
 
     def __init__(self, num=None, label=None, consumer=sys.argv[0]):
@@ -71,6 +72,7 @@ class Line:
 
     Create this object by calling :meth:`Chip.line`.
     """
+
     _line = None
     _direction = None
     _flags = None
@@ -85,7 +87,11 @@ class Line:
 
     def __repr__(self):
         return "<%s %s:%d %s=%d>" % (
-            self.__class__.__name__, self._chip, self._offset, self._line, self._state
+            self.__class__.__name__,
+            self._chip,
+            self._offset,
+            self._line,
+            self._state,
         )
 
     def open(self, direction=gpio.DIRECTION_INPUT, default=False, flags=0):

@@ -19,7 +19,8 @@ _r_chip = re.compile(
 )
 _r_pin = re.compile("^gpio-(?P<pin>[0-9]+) \\(.*\\) (?P<dir>in|out) +(?P<val>hi|lo)")
 
-Pin = namedtuple("Pin",["out","level"])
+Pin = namedtuple("Pin", ["out", "level"])
+
 
 class _GpioPin:
     """
@@ -76,7 +77,9 @@ class _GpioPin:
     def set(self, value: bool):
         logger.debug("SET %s %d %s", self.chip, self.pin, value)
         if self.fd is None:
-            raise RuntimeError("Pin %s/%d is not controlled via the 'gpio_mockup' module" % (self.chip,self.pin))
+            raise RuntimeError(
+                "Pin %s/%d is not controlled via the 'gpio_mockup' module" % (self.chip, self.pin)
+            )
         os.write(self.fd, b"1" if value else b"0")
         # os.lseek(self.fd, 0, os.SEEK_SET)
 
@@ -194,4 +197,3 @@ class GpioWatcher:
             finally:
                 self.tg = None
                 await tg.cancel_scope.cancel()
-
