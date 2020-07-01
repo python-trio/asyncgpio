@@ -1,3 +1,9 @@
+asyncgpio (0.4.4-1) unstable; urgency=medium
+
+  * Merge
+
+ -- Matthias Urlichs <matthias@urlichs.de>  Wed, 01 Jul 2020 11:49:28 +0200
+
 asyncgpio (0.4.3-1) unstable; urgency=medium
 
   * Merge

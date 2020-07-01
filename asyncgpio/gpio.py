@@ -1,7 +1,7 @@
 from . import libgpiod as gpio
 
 import sys
-import trio
+import anyio
 import datetime
 
 
@@ -18,6 +18,7 @@ class Chip:
             Defaults to the program name.
 
     """
+
     _chip = None
 
     def __init__(self, num=None, label=None, consumer=sys.argv[0]):
@@ -71,11 +72,15 @@ class Line:
 
     Create this object by calling :meth:`Chip.line`.
     """
+
     _line = None
     _direction = None
+    _default = None
     _flags = None
     _ev_flags = None
     _state = _FREE
+
+    _type = None
 
     def __init__(self, chip, offset, consumer=sys.argv[0][:-3]):
         self._chip = chip
@@ -85,7 +90,11 @@ class Line:
 
     def __repr__(self):
         return "<%s %s:%d %s=%d>" % (
-            self.__class__.__name__, self._chip, self._offset, self._line, self._state
+            self.__class__.__name__,
+            self._chip,
+            self._offset,
+            self._line,
+            self._state,
         )
 
     def open(self, direction=gpio.DIRECTION_INPUT, default=False, flags=0):
@@ -149,7 +158,6 @@ class Line:
         req.consumer = self.__consumer
         req.request_type = self._type
         req.flags = self._flags
-
         if gpio.lib.gpiod_line_request(self._line, req, 0) != 0:
             raise OSError("unable to request event monitoring")
         self._state = _IN_EV
@@ -225,7 +233,9 @@ class Line:
             return None
         return gpio.ffi.string(n).decode("utf-8")
 
-    def monitor(self, type=gpio.REQUEST_EVENT_RISING_EDGE, flags=0):
+    def monitor(
+        self, type=gpio.REQUEST_EVENT_RISING_EDGE, flags=0
+    ):  # pylint: disable=redefined-builtin
         """
         Monitor events.
 
@@ -254,13 +264,13 @@ class Line:
             raise OSError("unable to update state")
 
     def __iter__(self):
-        raise RuntimeError("You need to use 'async for'")
+        raise RuntimeError("You need to use 'async for', not 'for'")
 
-    def __aenter__(self):
-        raise RuntimeError("YOu need to use 'with'")
+    async def __aenter__(self):
+        raise RuntimeError("You need to use 'with', not 'async with'")
 
-    def __aexit__(self):
-        raise RuntimeError("YOu need to use 'with'")
+    async def __aexit__(self, *_):
+        raise RuntimeError("You need to use 'with', not 'async with'")
 
     def __aiter__(self):
         if self._state != _IN_EV:
@@ -275,7 +285,7 @@ class Line:
         fd = gpio.lib.gpiod_line_event_get_fd(self._line)
         if fd < 0:
             raise OSError("line is closed")
-        await trio.lowlevel.wait_readable(fd)
+        await anyio.wait_socket_readable(fd)
         self._is_open()
         r = gpio.lib.gpiod_line_event_read_fd(fd, ev)
         if r != 0:
