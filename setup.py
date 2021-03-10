@@ -13,7 +13,7 @@ setup(
     license="MIT -or- Apache License 2.0",
     packages=find_packages(),
     setup_requires=["setuptools_scm"],
-    install_requires=["trio >= 0.15", "cffi", "async-generator"],
+    install_requires=["anyio", "cffi", "async-generator"],
     keywords=["gpio"],
     python_requires=">=3.6",
     classifiers=[
