@@ -3,7 +3,7 @@ Maintainer: Matthias Urlichs <matthias@urlichs.de>
 Section: python
 Priority: optional
 Build-Depends: dh-python, python3-setuptools, python3-all, debhelper (>= 9),
-  libgpiod-dev (>= 1.4),
+  libgpiod-dev (>= 1.6),
   python3-cffi,
   python3-setuptools-scm,
   python3-trio (>= 0.15),
@@ -13,7 +13,7 @@ Homepage: https://github.com/M-o-a-T/asyncgpio
 Package: python3-asyncgpio
 Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends},
-  libgpiod2 (>= 1.4),
+  libgpiod2 (>= 1.6),
   python3-cffi,
   python3-trio (>= 0.15),
 Standards-Version: 3.9.6
