@@ -1,3 +1,9 @@
+asyncgpio (0.5.1-1) unstable; urgency=medium
+
+  * Merge
+
+ -- Matthias Urlichs <matthias@urlichs.de>  Mon, 05 Sep 2022 19:28:18 +0200
+
 asyncgpio (0.5.0-2) unstable; urgency=medium
 
   * Depend on libgpiod 1.6
