@@ -5,6 +5,12 @@ import anyio
 import datetime
 
 
+class _sock:
+    def __init__(self,fd):
+        self.fd = fd
+    def fileno(self):
+        return self.fd
+
 class Chip:
     """Represents a GPIO chip.
 
@@ -285,7 +291,7 @@ class Line:
         fd = gpio.lib.gpiod_line_event_get_fd(self._line)
         if fd < 0:
             raise OSError("line is closed")
-        await anyio.wait_socket_readable(fd)
+        await anyio.wait_socket_readable(_sock(fd))
         self._is_open()
         r = gpio.lib.gpiod_line_event_read_fd(fd, ev)
         if r != 0:
