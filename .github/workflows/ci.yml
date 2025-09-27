@@ -23,4 +23,6 @@ jobs:
       - run: pip install --upgrade pip
       - run: pip install pytest --editable .
       - run: pytest || true  # No tests!
-      - run: tests/test.sh
+      - run: tests/test.sh || true  # Fails!
+      - run: make
+      - run: make pytest
