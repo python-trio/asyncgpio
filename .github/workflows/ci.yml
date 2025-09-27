@@ -22,4 +22,5 @@ jobs:
           allow-prereleases: true
       - run: pip install --upgrade pip
       - run: pip install pytest --editable .
-      - run: pytest
+      - run: pytest || true  # No tests!
+      - run: tests/test.sh
